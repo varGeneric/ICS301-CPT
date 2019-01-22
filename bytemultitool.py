@@ -38,6 +38,13 @@ hash_sha1 = QLabel("SHA1: ")
 hash_sha256 = QLabel("SHA256: ")
 hash_crc32 = QLabel("CRC32: ")
 
+uint8_label = QLabel("uINT8")
+int8_label = QLabel("INT8")
+uint16_label = QLabel("uINT16")
+int16_label = QLabel("INT16")
+uint32_label = QLabel("uINT32")
+uint32_label = QLabel("INT32")
+
 file_menu = menu_bar.addMenu("&File")
 
 test_action = QAction("&Test")
@@ -85,6 +92,12 @@ def encoded_text_edit():
     )
 
 
+def get_data_hash(binary_data, hash_algo=md5):
+    hash_generator = hash_algo()
+    hash_generator.update(binary_data)
+    return hash_generator.hexdigest()
+
+
 def update_fields(binary_data):
     # Update raw hex field
     raw_hex.setText("0x" + hex(
@@ -110,21 +123,10 @@ def update_fields(binary_data):
         encoded_text.setText("Invalid character in string. ")
 
     # Update hashes
-    md5_generator = md5()
-    md5_generator.update(binary_data)
-    hash_md5.setText("MD5: " + md5_generator.hexdigest())
-
-    sha1_generator = sha1()
-    sha1_generator.update(binary_data)
-    hash_sha1.setText("SHA1: " + sha1_generator.hexdigest())
-
-    sha256_generator = sha256()
-    sha256_generator.update(binary_data)
-    hash_sha256.setText("SHA256: " + sha256_generator.hexdigest())
-
-    crc32_generator = crc32()
-    crc32_generator.update(binary_data)
-    hash_crc32.setText("CRC32: " + crc32_generator.hexdigest())
+    hash_md5.setText("MD5: " + get_data_hash(binary_data, md5))
+    hash_sha1.setText("SHA1: " + get_data_hash(binary_data, sha1))
+    hash_sha256.setText("SHA256: " + get_data_hash(binary_data, sha256))
+    hash_crc32.setText("CRC32: " + hex(crc32(binary_data))[2:])
 
     # Not implementing because 512 byte hashes take up a ton of window space
     # And are pretty much never used
@@ -174,7 +176,7 @@ def add_widgets_to_layout():
     text_encodings_menu.addItems(TEXT_ENCODINGS_STRINGS)
 
     # Give the menu bar a static height, looks bad when it resizes
-    menu_bar.setFixedHeight(20)
+    menu_bar.setFixedHeight(35)
     # Give the dropdown a fixed width, looks odd streched
     text_encodings_menu.setFixedWidth(120)
 
@@ -207,4 +209,5 @@ def main():
     app.exec_()
 
 
-main()
+if __name__ == "__main__":
+    main()
