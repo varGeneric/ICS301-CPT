@@ -1,12 +1,8 @@
 import sys
-#from crc8 import crc8
-#import crcmod
-#import crcmod.predefined
 from binascii import crc32, unhexlify, Error
-from hashlib import md5, sha1, sha256, sha512
+from hashlib import md5, sha1, sha256
 
-from PySide2.QtCore import Qt, Slot, QStringListModel
-#from PySide2.QtGui import QFocusEvent
+from PySide2.QtCore import Qt, Slot
 from PySide2.QtWidgets import (QAction, QApplication, QBoxLayout, QGridLayout,
                                QLabel, QLineEdit, QMenuBar, QWidget, QComboBox)
 
@@ -40,7 +36,7 @@ hashes_layout = QGridLayout()
 hash_md5 = QLabel("MD5: ")
 hash_sha1 = QLabel("SHA1: ")
 hash_sha256 = QLabel("SHA256: ")
-#hash_sha512 = QLabel("SHA512: ")
+hash_crc32 = QLabel("CRC32: ")
 
 file_menu = menu_bar.addMenu("&File")
 
@@ -126,11 +122,15 @@ def update_fields(binary_data):
     sha256_generator.update(binary_data)
     hash_sha256.setText("SHA256: " + sha256_generator.hexdigest())
 
+    crc32_generator = crc32()
+    crc32_generator.update(binary_data)
+    hash_crc32.setText("CRC32: " + crc32_generator.hexdigest())
+
     # Not implementing because 512 byte hashes take up a ton of window space
     # And are pretty much never used
-    #sha512_generator = sha512()
-    #sha512_generator.update(binary_data)
-    #hash_sha512.setText("SHA512: " + sha512_generator.hexdigest())
+    # sha512_generator = sha512()
+    # sha512_generator.update(binary_data)
+    # hash_sha512.setText("SHA512: " + sha512_generator.hexdigest())
 
 
 def register_menu_events():
@@ -153,7 +153,7 @@ def add_widgets_to_layout():
     hashes_layout.addWidget(hash_md5, 0, 0)
     hashes_layout.addWidget(hash_sha1, 0, 1)
     hashes_layout.addWidget(hash_sha256, 1, 0)
-    hashes_layout.addWidget(hash_sha512, 1, 1)
+    hashes_layout.addWidget(hash_crc32, 1, 1)
 
     raw_hex_layout.addWidget(raw_hex_label)
     raw_hex_layout.addWidget(raw_hex)
