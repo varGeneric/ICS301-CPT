@@ -25,11 +25,6 @@ little_endian = QLineEdit(window)
 little_endian_label = QLabel("Little Endian")
 little_endian_layout = QBoxLayout(QBoxLayout.TopToBottom)
 
-# Literally raw hex on non PPC/ARM systems
-# big_endian = QLineEdit(window)
-# big_endian_label = QLabel("Big Endian")
-# big_endian_layout = QBoxLayout(QBoxLayout.TopToBottom)
-
 encoded_text = QLineEdit(window)
 encoded_text_label = QLabel("Encoded Text")
 encoded_text_layout = QBoxLayout(QBoxLayout.TopToBottom)
